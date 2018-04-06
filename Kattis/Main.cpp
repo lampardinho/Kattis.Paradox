@@ -1,14 +1,24 @@
 #include <iostream>
 
-int cache[30][30];
-// https://stackoverflow.com/questions/22645551/calculate-the-fibonacci-number-recursive-approach-in-compile-time-constexpr
-template<size_t x, size_t y, size_t steps>
-struct cachedSteps : std::integral_constant< size_t, cachedSteps<x-1, y-1, steps-1>{} + cachedSteps<x, y-1, steps-1>{} + cachedSteps<x+1, y, steps-1>{} + cachedSteps<x+1, y+1, steps-1>{} + cachedSteps<x, y+1, steps-1>{} + cachedSteps<x-1, y, steps-1>{} >{};
+int cache[30][30][15];
+
+template<int x, int y, size_t steps>
+struct cachedSteps : std::integral_constant< size_t, 
+	cachedSteps<x-1, y-1, steps-1>::value + 
+	cachedSteps<x, y-1, steps-1>::value + 
+	cachedSteps<x+1, y, steps-1>::value + 
+	cachedSteps<x+1, y+1, steps-1>::value + 
+	cachedSteps<x, y+1, steps-1>::value + 
+	cachedSteps<x-1, y, steps-1>::value >
+{
+	cachedSteps()
+	{
+		cache[x+15][y+15][steps] = 2;//this->value;
+	}
+};
 
 template<> struct cachedSteps<0, 0, 0> : std::integral_constant<size_t, 1> {};
-template<> struct cachedSteps<0, 1, 0> : std::integral_constant<size_t, 0> {};
-template<> struct cachedSteps<1, 0, 0> : std::integral_constant<size_t, 0> {};
-template<> struct cachedSteps<1, 1, 0> : std::integral_constant<size_t, 0> {};
+template<int x, int y> struct cachedSteps<x, y, 0> : std::integral_constant<size_t, 0> {};
 
 int w(int x, int y, int s)
 {
@@ -27,7 +37,7 @@ int w(int x, int y, int s)
 			w(x, y+1, s-1) +
 			w(x-1, y, s-1);
 
-		cache[x + 15][y + 15] = res;
+//		cache[x + 15][y + 15] = res;
 //	}
 //	else
 //	{
@@ -43,10 +53,36 @@ void clearCache()
 	{
 		for ( int j = 0; j < 30; ++j )
 		{
-			cache[i][j] = -1;
+			for ( int k = 0; k < 30; ++k )
+			{
+//				cache[i][j][k] = cachedSteps<i, j, k>::value;
+			}
 		}
 	}
 }
+
+template<> struct cachedSteps<0, 0, 14>{};
+
+
+int FIB[21];
+
+template <int x, int y, size_t steps> struct Fib { static const int VAL; };
+template <int x, int y, size_t steps> const int Fib<x, y, steps>::VAL =
+	cache[x][y][steps] =
+	Fib<x-1, y-1, steps-1>::VAL/* + 
+	Fib<x, y-1, steps-1>::VAL + 
+	Fib<x+1, y, steps-1>::VAL + 
+	Fib<x+1, y+1, steps-1>::VAL + 
+	Fib<x, y+1, steps-1>::VAL + 
+	Fib<x-1, y, steps-1>::VAL*/;
+
+template <> struct Fib<0, 0, 0> { static const int VAL; };
+const int Fib<0, 0, 0>::VAL = cache[0][0][0] = 1;
+
+template <int x, int y> struct Fib<x, y, 0> { static const int VAL; };
+template <int x, int y> const int Fib<x, y, 0>::VAL = cache[x][y][0]=0;
+
+template struct Fib<0, 0, 10>; //explicit template instantiation
 
 int main()
 {
@@ -62,7 +98,9 @@ int main()
 	for ( int i = 0; i < testsCount; ++i )
 	{
 		clearCache();
-		std::cout << ( cachedSteps<0, 0, tests[i]>{} ) << std::endl;
+//		std::cout << cachedSteps<0, 0, tests[i]>::value << std::endl;
+//		std::cout << cache[0][0][tests[i]] << std::endl;
+		std::cout << cache[0][0][tests[i]] << std::endl;
 	}
 	
 	getchar();
