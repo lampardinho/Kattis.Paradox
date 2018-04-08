@@ -76,7 +76,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <StackReserveSize>419430400</StackReserveSize>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -115,7 +119,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="b1.cpp" />
+    <ClCompile Include="b2.cpp" />
     <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="b.in" />
+    <None Include="b.out" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

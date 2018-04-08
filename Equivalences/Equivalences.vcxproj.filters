@@ -18,5 +18,19 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="b1.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="b2.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="b.in">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="b.out">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
