@@ -3,19 +3,6 @@
 #include <algorithm>
 #include <stack>
 
-template<typename T>
-std::ostream& operator<< (std::ostream& out, const std::vector<T>& v) {
-    out << "{";
-    size_t last = v.size() - 1;
-    for(size_t i = 0; i < v.size(); ++i) {
-        out << v[i];
-        if (i != last) 
-            out << ", ";
-    }
-    out << "}";
-    return out;
-}
-
 std::vector<bool> isVisited;
 std::vector<size_t> components;
 std::stack<size_t> visitedNodes;
@@ -45,7 +32,7 @@ void dfs(size_t node)
 
 void dfsReversed(size_t node, size_t stronglyConnectedComponent) 
 {
-	if (components[node] == INVALID_COMPONENT)
+	if (components[node] != INVALID_COMPONENT)
 	{
 		return;
 	}
@@ -107,7 +94,11 @@ size_t runTest()
 		const size_t node = visitedNodes.top();			
 		visitedNodes.pop();
 		
-		dfsReversed(node, stronglyConnectedComponentsCount++);
+		if (components[node] == INVALID_COMPONENT)
+		{
+			dfsReversed(node, stronglyConnectedComponentsCount);
+			stronglyConnectedComponentsCount++;
+		}
 	}
 
 	if (stronglyConnectedComponentsCount == 1) 
